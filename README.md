@@ -51,8 +51,19 @@ export GENTAR_ENV=SANDBOX
 Note: You can use the <a href="https://www.gentar.org/production-tracker-sandbox/#/">SANDBOX</a> to test the update.
 Use "export GENTAR_ENV=PRODUCTION" to update the main service.
 
+## 6. Invoke the program
+```
+python phenotyping_stage_status_transition_by_colony.py
+```
+This will produce the following sort of output
+```
+processing JR34077
+JR34077 sucessfully updated
+```
+If the colony cannot be updated (e.g. because of the phenotyping stage or current status) you will only see the line stating that the colony is being processed. However, an error will be thrown if a colony name cannot be found and processing will stop. In this case, edit the colonies file to correct the name or remove the line and then restart the program.
+
 ---
-## 5. Once you have finished working in the virtual environment clean up
+## 7. Once you have finished working in the virtual environment clean up
 
 ```
 deactivate
