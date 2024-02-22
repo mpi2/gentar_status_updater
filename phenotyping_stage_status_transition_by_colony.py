@@ -51,8 +51,23 @@ class Updater:
 
             stage = stage_data['phenotypingTypeName']
             status = stage_data["statusName"]
-            if stage == 'early adult and embryo' and status == 'Phenotyping Started':
-                self.update_status(stage_data, colony, stage_url)
+
+            phenotyping_stage = os.getenv('PHENOTYPING_STAGE', False)
+
+            if phenotyping_stage == 'LATE_ADULT':
+                if stage == 'late adult' and status == 'Late Adult Phenotyping Started':
+                    self.update_status(stage_data, colony, stage_url)
+
+            if phenotyping_stage == 'EARLY_ADULT_AND_EMBRYO':
+                if stage == 'early adult and embryo' and status == 'Phenotyping Started':
+                    self.update_status(stage_data, colony, stage_url)
+
+            if phenotyping_stage == 'BOTH':
+                if status == 'Phenotyping Started' or status == 'Late Adult Phenotyping Started':
+                    self.update_status(stage_data, colony, stage_url)
+            else:
+                if stage == 'early adult and embryo' and status == 'Phenotyping Started':
+                    self.update_status(stage_data, colony, stage_url)
 
     def update_status(self, stage_data, colony, stage_url):
         stage_data["statusTransition"]["actionToExecute"] = "updateToPhenotypingAllDataSent"

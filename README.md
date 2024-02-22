@@ -51,6 +51,15 @@ export GENTAR_ENV=SANDBOX
 Note: You can use the <a href="https://www.gentar.org/production-tracker-sandbox/#/">SANDBOX</a> to test the update.
 Use "export GENTAR_ENV=PRODUCTION" to update the main service.
 
+### D) Optionally specify the type of phenotyping stage to update.
+By default only 'early adult and embryo' phenotyping stages are modified.
+Alternatively, you can select from one of these options:
+```
+export PHENOTYPING_STAGE=LATE_ADULT
+export PHENOTYPING_STAGE=BOTH
+export PHENOTYPING_STAGE=EARLY_ADULT_AND_EMBRYO
+```
+
 ## 6. Invoke the program
 ```
 python phenotyping_stage_status_transition_by_colony.py
