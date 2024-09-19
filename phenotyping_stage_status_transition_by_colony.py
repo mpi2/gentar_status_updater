@@ -58,11 +58,11 @@ class Updater:
                 if stage == 'late adult' and status == 'Late Adult Phenotyping Started':
                     self.update_status(stage_data, colony, stage_url)
 
-            if phenotyping_stage == 'EARLY_ADULT_AND_EMBRYO':
+            elif phenotyping_stage == 'EARLY_ADULT_AND_EMBRYO':
                 if stage == 'early adult and embryo' and status == 'Phenotyping Started':
                     self.update_status(stage_data, colony, stage_url)
 
-            if phenotyping_stage == 'BOTH':
+            elif phenotyping_stage == 'BOTH':
                 if status == 'Phenotyping Started' or status == 'Late Adult Phenotyping Started':
                     self.update_status(stage_data, colony, stage_url)
             else:
