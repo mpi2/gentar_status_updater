@@ -79,6 +79,7 @@ class Updater:
         if status == 200:
             print("{} sucessfully updated".format(colony))
 
+
     def obtain_token(self):
         user = os.getenv('GENTAR_USER')
         password = os.getenv('GENTAR_PASSWORD')
