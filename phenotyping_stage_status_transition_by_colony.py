@@ -5,6 +5,8 @@ import os
 import sys
 
 
+REQUEST_TIMEOUT_SECONDS = 30
+
 class Updater:
 
     def __init__(self):
@@ -68,9 +70,11 @@ class Updater:
             else:
                 if stage == 'early adult and embryo' and status == 'Phenotyping Started':
                     self.update_status(stage_data, colony, stage_url)
+                else:
+                    self.update_status(stage_data, colony, stage_url)
 
     def update_status(self, stage_data, colony, stage_url):
-        stage_data["statusTransition"]["actionToExecute"] = "updateToPhenotypingAllDataSent"
+        stage_data["statusTransition"]["actionToExecute"] = "updateToPhenotypingAllDataProcessed"
         json, status = self.revise_service(stage_url, stage_data)
         if status == 200:
             print("{} sucessfully updated".format(colony))
@@ -85,7 +89,7 @@ class Updater:
         headers = {'Content-Type': 'application/json', 'cache-control': 'no-cache'}
         credentials = {'userName': user, 'password': password}
 
-        r = requests.post(url, headers=headers, json=credentials)
+        r = requests.post(url, headers=headers, json=credentials, timeout=REQUEST_TIMEOUT_SECONDS)
 
         if r.status_code == 200:
             self.token = r.json()['accessToken']
@@ -105,7 +109,7 @@ class Updater:
                    'cache-control': 'no-cache',
                    'Authorization': 'Bearer ' + self.token}
 
-        r = requests.get(url, headers=headers)
+        r = requests.get(url, headers=headers, timeout=REQUEST_TIMEOUT_SECONDS)
         r.raise_for_status()
 
         return r.json()
@@ -115,7 +119,7 @@ class Updater:
                    'cache-control': 'no-cache',
                    'Authorization': 'Bearer ' + self.token}
 
-        r = requests.put(url, headers=headers, json=data)
+        r = requests.put(url, headers=headers, json=data, timeout=REQUEST_TIMEOUT_SECONDS)
         r.raise_for_status()
         return r.json, r.status_code
 
