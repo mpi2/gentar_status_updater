@@ -1,8 +1,9 @@
 import csv
-
-import requests
 import os
 import sys
+from urllib.parse import urljoin, urlparse
+
+import requests
 
 
 REQUEST_TIMEOUT_SECONDS = 30
@@ -105,17 +106,36 @@ class Updater:
             # Tokens are valid for 3 hours so no need to process an error.
             pass
 
-    def fetch_one_entry(self, url):
+    def validate_service_url(self, url):
+        resolved_url = urljoin(self.service, url)
+        service_url = urlparse(self.service)
+        candidate_url = urlparse(resolved_url)
+
+        service_origin = (service_url.scheme.lower(), service_url.netloc.lower())
+        candidate_origin = (candidate_url.scheme.lower(), candidate_url.netloc.lower())
+
+        if candidate_origin != service_origin:
+            raise ValueError("Refusing to send bearer token to unexpected URL origin: {}".format(resolved_url))
+
+        service_path = service_url.path if service_url.path.endswith('/') else service_url.path + '/'
+        if service_path != '/' and not candidate_url.path.startswith(service_path):
+            raise ValueError("Refusing to send bearer token to URL outside configured API path: {}".format(resolved_url))
+
+        return resolved_url
+
+    def fetch_one_entry(self, url, params=None):
+        url = self.validate_service_url(url)
         headers = {'Content-Type': 'application/json',
                    'cache-control': 'no-cache',
                    'Authorization': 'Bearer ' + self.token}
 
-        r = requests.get(url, headers=headers, timeout=REQUEST_TIMEOUT_SECONDS)
+        r = requests.get(url, headers=headers, params=params, timeout=REQUEST_TIMEOUT_SECONDS)
         r.raise_for_status()
 
         return r.json()
 
     def revise_service(self, url, data):
+        url = self.validate_service_url(url)
         headers = {'Content-Type': 'application/json',
                    'cache-control': 'no-cache',
                    'Authorization': 'Bearer ' + self.token}
@@ -125,8 +145,8 @@ class Updater:
         return r.json, r.status_code
 
     def fetch_gentar_plan(self, colony_name):
-        url = self.service + self.api + "plans?phenotypingExternalRef=" + colony_name
-        return self.fetch_one_entry(url)
+        url = self.service + self.api + "plans"
+        return self.fetch_one_entry(url, params={'phenotypingExternalRef': colony_name})
 
 
 if __name__ == '__main__':

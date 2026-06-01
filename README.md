@@ -1,20 +1,20 @@
 # gentar_status_updater
 An application to migrate the state of a phenotyping plan in GenTaR 
 
-This project was written using python 3.9.4
-and has been tested on OSX
+This project requires a currently supported Python 3 release. It has been
+tested with Python 3.13.1 on macOS.
 
 ## 1. Check your python installation:
 
 ```
-python --version
+python3 --version
 ```
 
-## 2. Create a virtual environment for the project (requires Python 3.4+)
+## 2. Create a virtual environment for the project
 
 ```
 cd <name_of_cloned_github_repository>
-python -m venv venv
+python3 -m venv venv
 ```
 
 ## 3. To begin using the virtual environment, it needs to be activated:
@@ -62,7 +62,7 @@ export PHENOTYPING_STAGE=EARLY_ADULT_AND_EMBRYO
 
 ## 6. Invoke the program
 ```
-python phenotyping_stage_status_transition_by_colony.py
+python3 phenotyping_stage_status_transition_by_colony.py
 ```
 This will produce the following sort of output
 ```
@@ -81,4 +81,8 @@ deactivate
 This puts you back to the system’s default Python interpreter
 with all its installed libraries.
 
+## Security scanning
 
+GitLab SAST, Secret Detection, and Dependency Scanning are enabled in
+`.gitlab-ci.yml`. Keep these CI templates enabled for merge requests and
+default branch pipelines.
