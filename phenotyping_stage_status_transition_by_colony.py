@@ -75,7 +75,7 @@ class Updater:
                     self.update_status(stage_data, colony, stage_url)
 
     def update_status(self, stage_data, colony, stage_url):
-        stage_data["statusTransition"]["actionToExecute"] = "updateToPhenotypingAllDataProcessed"
+        stage_data["statusTransition"]["actionToExecute"] = "updateToPhenotypingAllDataSent"
         json, status = self.revise_service(stage_url, stage_data)
         if status == 200:
             print("{} sucessfully updated".format(colony))
