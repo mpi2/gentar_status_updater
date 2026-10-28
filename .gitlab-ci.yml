@@ -21,5 +21,16 @@ sast:
 secret_detection:
   stage: test
 
+generate-dependency-graph:
+  stage: build
+  image: python:3.13-slim
+  script:
+    - python -m pip install -r requirements.txt pipdeptree
+    - pipdeptree --exclude pipdeptree --json > pipdeptree.json
+  artifacts:
+    paths:
+      - pipdeptree.json
+
 stages:
+  - build
   - test
